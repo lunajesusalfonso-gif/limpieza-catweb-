@@ -31,9 +31,9 @@ La `Ñ` y la `Ü` se conservan, porque el mapa de acentos solo cubre las cinco v
 ```
 ├── src/limpieza_catweb.py      # Lógica de limpieza
 ├── scripts/generar_dummy.py    # Genera el Excel de prueba (datos ficticios)
-├── data/input/BD_raiz.xlsx     # Excel dummy de entrada
+├── data/input/catalogo_bruto.xlsx  # Excel dummy de entrada
 ├── data/output/                # CSV generados (ignorados por git)
-├── tests/test_limpieza.py      # Pruebas automáticas
+├── tests/test_limpieza_catweb.py   # Pruebas automáticas
 ├── .env.example                # Plantilla de variables de entorno
 ├── requirements.txt
 └── README.md
@@ -75,9 +75,9 @@ python src/limpieza_catweb.py --input ruta/entrada.xlsx --output ruta/salida.csv
 
 | Argumento | Descripción | Por defecto |
 |-----------|-------------|-------------|
-| `--input` | Excel de entrada | `data/input/BD_raiz.xlsx` |
-| `--output` | CSV limpio | `data/output/CatSkuWeb.csv` |
-| `--backup` | CSV de respaldo | `data/output/backup/CatSkuWeb_respaldo.csv` |
+| `--input` | Excel de entrada | `data/input/catalogo_bruto.xlsx` |
+| `--output` | CSV limpio | `data/output/catalogo_limpio.csv` |
+| `--backup` | CSV de respaldo | `data/output/backup/catalogo_limpio_respaldo.csv` |
 | `--sin-respaldo` | No genera respaldo | desactivado |
 
 ## Datos de entrada y salida

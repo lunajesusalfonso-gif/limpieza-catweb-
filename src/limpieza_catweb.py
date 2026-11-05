@@ -7,7 +7,7 @@ duplicados por SKU y exporta un CSV limpio (más un respaldo opcional).
 
 Uso:
     python src/limpieza_catweb.py
-    python src/limpieza_catweb.py --input data/input/BD_raiz.xlsx --output data/output/CatSkuWeb.csv
+    python src/limpieza_catweb.py --input data/input/catalogo_bruto.xlsx --output data/output/catalogo_limpio.csv
 """
 import argparse
 from pathlib import Path
@@ -16,9 +16,9 @@ import pandas as pd
 
 # Raíz del proyecto: la carpeta que contiene /src
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEFAULT_INPUT = BASE_DIR / "data" / "input" / "BD_raiz.xlsx"
-DEFAULT_OUTPUT = BASE_DIR / "data" / "output" / "CatSkuWeb.csv"
-DEFAULT_BACKUP = BASE_DIR / "data" / "output" / "backup" / "CatSkuWeb_respaldo.csv"
+DEFAULT_INPUT = BASE_DIR / "data" / "input" / "catalogo_bruto.xlsx"
+DEFAULT_OUTPUT = BASE_DIR / "data" / "output" / "catalogo_limpio.csv"
+DEFAULT_BACKUP = BASE_DIR / "data" / "output" / "backup" / "catalogo_limpio_respaldo.csv"
 
 # Patrón REGEXP: elimina caracteres especiales y guiones bajos
 PATRON_ESPECIALES = r"[^\w\s]|_"

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Genera un Excel de prueba (datos 100% ficticios) en data/input/BD_raiz.xlsx.
+Genera un Excel de prueba (datos 100% ficticios) en data/input/catalogo_bruto.xlsx.
 
 CASOS define un caso por cada regla de limpieza: (SKU, valor de entrada, resultado esperado).
 Los tests importan esta lista, así el dummy y las pruebas siempre están sincronizados.
@@ -11,7 +11,7 @@ from pathlib import Path
 import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SALIDA = BASE_DIR / "data" / "input" / "BD_raiz.xlsx"
+SALIDA = BASE_DIR / "data" / "input" / "catalogo_bruto.xlsx"
 
 # (sku, ZCATWEB1 de entrada, ZCATWEB1 esperado tras la limpieza, regla que ejercita)
 CASOS = [
