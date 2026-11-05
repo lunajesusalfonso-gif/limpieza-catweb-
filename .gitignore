@@ -1,0 +1,30 @@
+# Secretos y configuración local
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+config.local.*
+
+# Datos reales y salidas (el Excel dummy en data/input SÍ se versiona)
+data/output/*
+!data/output/.gitkeep
+data/real/
+*.csv
+*.bak
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# IDE / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+~$*.xlsx
