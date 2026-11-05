@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Limpieza de categorías web (CatWeb).
+Limpieza de categorías.
 
 Lee un Excel en bruto, normaliza las columnas de categoría, elimina
 duplicados por SKU y exporta un CSV limpio (más un respaldo opcional).
 
 Uso:
-    python src/limpieza_catweb.py
-    python src/limpieza_catweb.py --input data/input/catalogo_bruto.xlsx --output data/output/catalogo_limpio.csv
+    python src/limpieza_categorias.py
+    python src/limpieza_categorias.py --input data/input/catalogo_bruto.xlsx --output data/output/catalogo_limpio.csv
 """
 import argparse
 from pathlib import Path
@@ -25,7 +25,7 @@ PATRON_ESPECIALES = r"[^\w\s]|_"
 ACENTOS = {"Á": "A", "É": "E", "Í": "I", "Ó": "O", "Ú": "U"}
 
 
-def limpiar_categoria(serie: pd.Series) -> pd.Series:
+def normalizar_texto(serie: pd.Series) -> pd.Series:
     """Quita caracteres especiales y acentos, pasa a mayúsculas y rellena nulos con 'N/A'."""
     return (
         serie.replace(PATRON_ESPECIALES, "", regex=True)
@@ -36,18 +36,18 @@ def limpiar_categoria(serie: pd.Series) -> pd.Series:
     )
 
 
-def limpiar_catweb(df: pd.DataFrame) -> pd.DataFrame:
+def limpiar_categorias(df: pd.DataFrame) -> pd.DataFrame:
     """Aplica toda la limpieza y devuelve un DataFrame nuevo (no modifica el original)."""
     limpio = df.copy()
-    limpio["ZCATWEB1"] = limpiar_categoria(limpio["ZCATWEB1"])
-    limpio["ZCATWEB2"] = limpio["ZCATWEB1"]
+    limpio["categoria_1"] = normalizar_texto(limpio["categoria_1"])
+    limpio["categoria_2"] = limpio["categoria_1"]
     # Se conserva solo el primer registro por SKU
-    return limpio.drop_duplicates(subset=["ZSKU_WEB"], keep="first")
+    return limpio.drop_duplicates(subset=["sku"], keep="first")
 
 
 def preparar_tabla_sql(df: pd.DataFrame) -> pd.DataFrame:
     """Subconjunto de columnas listo para cargar a la tabla R_SKU&SUBCAT en SQL Server."""
-    return df[["ZSKU_WEB", "ZCATWEB1", "ZCATWEB2"]]
+    return df[["sku", "categoria_1", "categoria_2"]]
 
 
 def exportar_csv(df: pd.DataFrame, ruta: Path) -> None:
@@ -56,7 +56,7 @@ def exportar_csv(df: pd.DataFrame, ruta: Path) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Limpieza de categorías web.")
+    parser = argparse.ArgumentParser(description="Limpieza de categorías.")
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT, help="Excel de entrada")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="CSV limpio de salida")
     parser.add_argument("--backup", type=Path, default=DEFAULT_BACKUP, help="CSV de respaldo")
@@ -69,7 +69,7 @@ def main() -> None:
         )
 
     bruto = pd.read_excel(args.input)
-    limpio = limpiar_catweb(bruto)
+    limpio = limpiar_categorias(bruto)
 
     exportar_csv(limpio, args.output)
     if not args.sin_respaldo:

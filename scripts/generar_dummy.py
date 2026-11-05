@@ -13,7 +13,7 @@ import pandas as pd
 BASE_DIR = Path(__file__).resolve().parent.parent
 SALIDA = BASE_DIR / "data" / "input" / "catalogo_bruto.xlsx"
 
-# (sku, ZCATWEB1 de entrada, ZCATWEB1 esperado tras la limpieza, regla que ejercita)
+# (sku, categoria_1 de entrada, categoria_1 esperado tras la limpieza, regla que ejercita)
 CASOS = [
     ("SKU00001", "Electrónica y Audio", "ELECTRONICA Y AUDIO", "acento en minúscula + mayúsculas"),
     ("SKU00002", "ÁÉÍÓÚ áéíóú", "AEIOU AEIOU", "las 5 vocales con acento, mayúscula y minúscula"),
@@ -46,14 +46,14 @@ CATEGORIAS_RELLENO = [
 
 def generar(n_relleno: int = 26, seed: int = 42) -> pd.DataFrame:
     random.seed(seed)
-    filas = [{"ZSKU_WEB": s, "ZCATWEB1": c, "ZCATWEB2": None} for s, c, _, _ in CASOS]
+    filas = [{"sku": s, "categoria_1": c, "categoria_2": None} for s, c, _, _ in CASOS]
     inicio = len(CASOS) + 1
     filas += [
-        {"ZSKU_WEB": f"SKU{i:05d}", "ZCATWEB1": random.choice(CATEGORIAS_RELLENO), "ZCATWEB2": None}
+        {"sku": f"SKU{i:05d}", "categoria_1": random.choice(CATEGORIAS_RELLENO), "categoria_2": None}
         for i in range(inicio, inicio + n_relleno)
     ]
     # Duplicados al final para que "keep first" conserve los casos originales
-    filas += [{"ZSKU_WEB": s, "ZCATWEB1": c, "ZCATWEB2": None} for s, c in DUPLICADOS]
+    filas += [{"sku": s, "categoria_1": c, "categoria_2": None} for s, c in DUPLICADOS]
     return pd.DataFrame(filas)
 
 

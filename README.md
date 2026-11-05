@@ -1,6 +1,6 @@
-# Limpieza de Categorías Web (CatWeb)
+# Limpieza de Categorías
 
-Pipeline en Python que limpia y normaliza las categorías web de un catálogo de productos y genera un CSV listo para cargar a una base de datos.
+Pipeline en Python que limpia y normaliza las categorías de un catálogo de productos y genera un CSV listo para cargar a una base de datos.
 
 ## Descripción
 
@@ -20,15 +20,15 @@ Los catálogos de productos suelen traer categorías escritas de forma inconsist
 | 2 | Quita acentos (Á É Í Ó Ú) | `Electrónica` → `ELECTRONICA` |
 | 3 | Pasa a mayúsculas | `cables usb` → `CABLES USB` |
 | 4 | Rellena valores nulos con `N/A` | `None` → `N/A` |
-| 5 | Copia `ZCATWEB1` a `ZCATWEB2` | |
-| 6 | Elimina duplicados, conserva el primer registro por `ZSKU_WEB` | |
-| 7 | Exporta CSV y un respaldo; prepara la tabla `ZSKU_WEB, ZCATWEB1, ZCATWEB2` | |
+| 5 | Copia `categoria_1` a `categoria_2` | |
+| 6 | Elimina duplicados, conserva el primer registro por `sku` | |
+| 7 | Exporta CSV y un respaldo; prepara la tabla `sku, categoria_1, categoria_2` | |
 
 La `Ñ` y la `Ü` se conservan, porque el mapa de acentos solo cubre las cinco vocales.
 
 ### Ejemplo antes y después
 
-| ZSKU_WEB | ZCATWEB1 (entrada) | ZCATWEB1 / ZCATWEB2 (salida) |
+| sku | categoria_1 (entrada) | categoria_1 / categoria_2 (salida) |
 |----------|--------------------|------------------------------|
 | SKU00001 | `Electrónica y Audio` | `ELECTRONICA Y AUDIO` |
 | SKU00004 | `Iluminación_LED` | `ILUMINACIONLED` |
@@ -40,7 +40,7 @@ La `Ñ` y la `Ü` se conservan, porque el mapa de acentos solo cubre las cinco v
 
 ```
 ├── src/
-│   └── limpieza_catweb.py        # Lógica de limpieza
+│   └── limpieza_categorias.py        # Lógica de limpieza
 ├── scripts/
 │   └── generar_dummy.py          # Genera el Excel de prueba (datos ficticios)
 ├── data/
@@ -48,7 +48,7 @@ La `Ñ` y la `Ü` se conservan, porque el mapa de acentos solo cubre las cinco v
 │   │   └── catalogo_bruto.xlsx   # Excel dummy de entrada
 │   └── output/                   # CSV generados (ignorados por git)
 ├── tests/
-│   └── test_limpieza_catweb.py   # Pruebas automáticas
+│   └── test_limpieza_categorias.py   # Pruebas automáticas
 ├── .env.example                  # Plantilla de variables de entorno
 ├── requirements.txt
 └── README.md
@@ -76,7 +76,7 @@ pip install -r requirements.txt
 python scripts/generar_dummy.py
 
 # 2. Ejecutar la limpieza con las rutas por defecto
-python src/limpieza_catweb.py
+python src/limpieza_categorias.py
 
 # 3. Ejecutar las pruebas
 pytest
@@ -85,7 +85,7 @@ pytest
 Con rutas propias:
 
 ```bash
-python src/limpieza_catweb.py --input ruta/entrada.xlsx --output ruta/salida.csv --sin-respaldo
+python src/limpieza_categorias.py --input ruta/entrada.xlsx --output ruta/salida.csv --sin-respaldo
 ```
 
 | Argumento | Descripción | Por defecto |
@@ -97,9 +97,9 @@ python src/limpieza_catweb.py --input ruta/entrada.xlsx --output ruta/salida.csv
 
 ## Datos de entrada y salida
 
-**Entrada** (Excel): columnas `ZSKU_WEB`, `ZCATWEB1`, `ZCATWEB2`.
+**Entrada** (Excel): columnas `sku`, `categoria_1`, `categoria_2`.
 
-**Salida** (CSV, UTF-8): las mismas columnas, con `ZCATWEB1` y `ZCATWEB2` normalizadas y un registro por SKU.
+**Salida** (CSV, UTF-8): las mismas columnas, con `categoria_1` y `categoria_2` normalizadas y un registro por SKU.
 
 Los datos del repositorio son ficticios y se generan con `scripts/generar_dummy.py`.
 
