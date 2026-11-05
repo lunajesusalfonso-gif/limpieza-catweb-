@@ -16,7 +16,7 @@ Los catálogos de productos suelen traer categorías escritas de forma inconsist
 
 | Paso | Regla | Ejemplo |
 |------|-------|---------|
-| 1 | Elimina caracteres especiales y guiones bajos (regex) | `Iluminación_LED` → `Iluminación LED` sin símbolos |
+| 1 | Elimina caracteres especiales y guiones bajos (regex) | `Baterías, Pilas (AA)` → `Baterías Pilas AA` |
 | 2 | Quita acentos (Á É Í Ó Ú) | `Electrónica` → `ELECTRONICA` |
 | 3 | Pasa a mayúsculas | `cables usb` → `CABLES USB` |
 | 4 | Rellena valores nulos con `N/A` | `None` → `N/A` |
@@ -26,15 +26,30 @@ Los catálogos de productos suelen traer categorías escritas de forma inconsist
 
 La `Ñ` y la `Ü` se conservan, porque el mapa de acentos solo cubre las cinco vocales.
 
+### Ejemplo antes y después
+
+| ZSKU_WEB | ZCATWEB1 (entrada) | ZCATWEB1 / ZCATWEB2 (salida) |
+|----------|--------------------|------------------------------|
+| SKU00001 | `Electrónica y Audio` | `ELECTRONICA Y AUDIO` |
+| SKU00004 | `Iluminación_LED` | `ILUMINACIONLED` |
+| SKU00005 | `Baterías, Pilas y Cargadores` | `BATERIAS PILAS Y CARGADORES` |
+| SKU00011 | *(vacío)* | `N/A` |
+| SKU00001 (repetido) | `Categoría Distinta Uno` | *(se descarta, se conserva el primero)* |
+
 ## Estructura del proyecto
 
 ```
-├── src/limpieza_catweb.py      # Lógica de limpieza
-├── scripts/generar_dummy.py    # Genera el Excel de prueba (datos ficticios)
-├── data/input/catalogo_bruto.xlsx  # Excel dummy de entrada
-├── data/output/                # CSV generados (ignorados por git)
-├── tests/test_limpieza_catweb.py   # Pruebas automáticas
-├── .env.example                # Plantilla de variables de entorno
+├── src/
+│   └── limpieza_catweb.py        # Lógica de limpieza
+├── scripts/
+│   └── generar_dummy.py          # Genera el Excel de prueba (datos ficticios)
+├── data/
+│   ├── input/
+│   │   └── catalogo_bruto.xlsx   # Excel dummy de entrada
+│   └── output/                   # CSV generados (ignorados por git)
+├── tests/
+│   └── test_limpieza_catweb.py   # Pruebas automáticas
+├── .env.example                  # Plantilla de variables de entorno
 ├── requirements.txt
 └── README.md
 ```
@@ -47,8 +62,8 @@ La `Ñ` y la `Ü` se conservan, porque el mapa de acentos solo cubre las cinco v
 ## Instalación
 
 ```bash
-git clone <url-del-repositorio>
-cd <carpeta-del-repositorio>
+git clone https://github.com/lunajesusalfonso-gif/limpieza-catweb-.git
+cd limpieza-catweb-
 python -m venv .venv
 .venv\Scripts\activate        # Windows  (Linux/Mac: source .venv/bin/activate)
 pip install -r requirements.txt
